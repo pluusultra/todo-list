@@ -35,7 +35,7 @@ class Todo {
         this.state = {
             items: this.getItemsFromLocalStorage(),
             filteredItems: null,
-            searchQuery: ''
+            searchQuery: '',
         }
         this.render()
         this.bindEvents()
@@ -117,7 +117,9 @@ class Todo {
 
     deleteItem(id) {
         this.state.items = this.state.items.filter((item) => item.id !== id)
+
         this.saveItemsToLocalStorage()
+        this.filter()
         this.render()
     }
 
@@ -133,7 +135,9 @@ class Todo {
             return item
         })
         this.saveItemsToLocalStorage()
-        this.render()
+        // this.render()
+        // this.render() закомментирован так как если рендерить по новой в этом методе,
+        // то перестают ставиться чекбоксы в момент, когда у тебя в строке поиска что-то есть
     }
 
     filter () {
@@ -141,7 +145,6 @@ class Todo {
 
         this.state.filteredItems = this.state.items.filter(({ title }) => {
             const titleFormatted = title.toLowerCase()
-
             return titleFormatted.includes(queryFormatted)
         })
         this.render()
@@ -187,6 +190,7 @@ class Todo {
         if (isConfirmed) {
             this.state.items = []
             this.saveItemsToLocalStorage()
+            this.filter()
             this.render()
         }
     }
